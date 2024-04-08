@@ -7,7 +7,6 @@
 #' @param alpha Type I error rate. Options are only \code{0.01}, \code{0.025}, \code{0.05}, or \code{0.10}. Must be manually input. (default is \code{0.05})
 #' @param power Statistical power. Options are only \code{0.80} or \code{0.90}. Must be manually input. (default is \code{0.80})
 #' @param print Logical. Will display quantile test results. (default is \code{TRUE})
-#' @return edit later
 #' @examples
 #' # example code
 #' example_site <- data.frame(samples=c(15, 15, 17, 23, 16, 30, 60, 89, 90, 100), nondetect = c(1,rep(0,9)))
