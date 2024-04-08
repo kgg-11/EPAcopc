@@ -50,8 +50,8 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
         else if(alpha == 0.10){
           return(filtered_table$power0.8_alpha0.10)
         }
-      } #this curly bracket is the end of power = 0.8 statements
-      #now time for power 0f 0.90
+      } # end of power = 0.8 statements
+      # power 0f 0.90
       else if (power == 0.90){
         if(alpha == 0.01){
           return(filtered_table$power0.9_alpha0.01)
@@ -93,19 +93,17 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
   }
   ## Step 3:##
   # List pooled site and background from smallest to largest #
-  #I need a way to deal with nondetects #
   site$source <- 1 #deciding that site is a 1
   background$source <- 0 # deciding that background is a 0
   pooled_samples <- rbind(site, background)
-  sorted_pooled <- arrange(pooled_samples, samples)
-  #print(sorted_pooled) #slaying it worked; I'll delete this print sorted version before uploading
+  sorted_pooled <- dplyr::arrange(pooled_samples, samples)
 
   ## Step 4: ##
   # Find values of r and k needed#
   # based off n (site measurements the columns of arrays) and m (background measurments rows)
   m <- nrow(background) # nondetects included
   m_divided <- (m / 5)
-  m_ceil <- ceiling(m_divided) #rounding up because idk what else to do lolz
+  m_ceil <- ceiling(m_divided)
   m_rounded <- (m_ceil * 5)
   m_rounded <- as.character(m_rounded)
   #n transformation
@@ -193,9 +191,6 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
   M_a <- matrix(V_a, nrow=20, ncol = 20, byrow=TRUE)
   names <- seq(5, 100, by = 5)
   Array.01 <- array(c(M_r, M_k, M_a), dim=c(20, 20, 3), dimnames=list(names, names))
-  #Array["5", "5",]
-  #print(Array.01["15","10",]) # ayy that worked
-  #Array[row(m), col(n), ]
 
   ################## END FOR ALPHA 0.01 ##################
 
@@ -476,7 +471,7 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
     cat(row, "\n")
     cat(
       paste("SAMPLE SIZE:", "\t",
-            "Required (power):"),
+            "Recommended (power):"),
       paste0(nreq, " (", power, ")"),
       paste(
         "\t" ,
@@ -539,36 +534,21 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
   if (plot) {
 
     # data needed for plots
-    # the fill aesthetic doesn't like when they are filled by the same "thing" from different datasets and will put them as the same color
-    # (ex: background "samples" fill the same as site "samples" in aes layers). so here i am doing a bunch of redundant code to rename things (and make it more similar to the slippage code a bit)
     site_sorted <- subset(sorted_pooled, source==1)
-    site_sorted$measure_notNDs <- site_sorted$samples # naming scheme in slippage code / aes redundancy issue
+    site_sorted$measure_notNDs <- site_sorted$samples 
     background_sorted <- subset(sorted_pooled, source==0)
-    background_sorted$measure_notND <- background_sorted$samples # naming scheme in slippage code/ aes redundancy issue
+    background_sorted$measure_notND <- background_sorted$samples 
     r_samples_site <- subset(r_samples, source==1)
-    r_samples_site$measures <- r_samples_site$samples # aes redundancy issue
+    r_samples_site$measures <- r_samples_site$samples
 
     site$ND_tfs <- ifelse(nd.s==1, TRUE, NA)
     background$ND_tf <- ifelse(nd.b == 1, TRUE, NA) # getting rid of zero's and making them NA's for easier usage in ND bar plot
-
-    # I dont think we need the stuff below
-    # r_samples_background <- subset(r_samples, source==0)
-    # site_sorted$r_samples <- ifelse(r_samples_site$samples==site_sorted$samples, site_sorted$samples, NA) # i think we need a for-loop here or something
-
-    # THis is the slippage function data stuff that im basically trying to copy above
-    # site$measure_max <- ifelse(site$measure_notNDs > maxbg, TRUE, NA) # this is only for detects
-    # site$measure_max_measure <- ifelse(site$measure_max == TRUE, site$measure_notNDs, NA) # "Number of sites greater than background" with their corresponding measurements
-    # site$ND_tfs <- ifelse(nd.s == 1, TRUE, NA) # getting rid of zero's and making them NA's for easier usage in ND bar plot
-    # background$measure_notND <- ifelse(nd.b == 1, NA, measure.b) # removes concentration if it is a nondetect
-    # background$ND_tf <- ifelse(nd.b == 1, TRUE, NA) # getting rid of zero's and making them NA's for easier usage in ND bar plot
-    #
 
     # 2 ways of dynamically changing the bin size...
     #binw <- round(max(site$measure_max_measure, na.rm=T)/20)
     binw2 <- round(max(range(site_sorted$measure_notNDs, na.rm=T),range(background_sorted$measure_notND, na.rm=T))/15)
 
     # Creating histogram
-    # This layer seems to work **
     my_histogram <- ggplot2::ggplot(color = "black") +
       ggplot2::geom_histogram(
         data = site_sorted,
@@ -578,7 +558,6 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
         binwidth = binw2,
         na.rm = TRUE
       ) +
-      # This layer seems to work **
       ggplot2::geom_histogram(
         data = background_sorted,
         ggplot2::aes(x = measure_notND, fill = "measure_notND"),
@@ -587,8 +566,7 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
         binwidth = binw2,
         na.rm = TRUE
       ) +
-      # # Coloring over the max r values layer --> black eventually(?)
-      # This layer seems to work **
+      # # Coloring over the max r values layer --> black eventually
       ggplot2::geom_histogram(
         data=r_samples,
         ggplot2::aes(x=samples, fill="samples"),
@@ -598,7 +576,6 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
         na.rm=TRUE
       ) +
       # Coloring the site r's a gold color eventually
-      # This layer seems to wrok **
       ggplot2::geom_histogram(
         data=r_samples_site,
         ggplot2::aes(x=measures, fill="measures"),
@@ -608,7 +585,6 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
         na.rm=TRUE
       )
     # Customizing histogram more
-    # This layer seems to work **
     my_histogram <- my_histogram +
       ggplot2::theme_classic() +
       ggplot2::xlab("Concentration") +
@@ -620,8 +596,7 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
         name = "Measurement",
         labels = c("Background","Site","Site measurements within r","r")
       ) +
-      ggplot2::theme(axis.line = element_line(linewidth = 0.75))
-    ############### Where I still need to work on :
+      ggplot2::theme(axis.line = ggplot2::element_line(linewidth = 0.75))
 
     # # Creating bar chart of non-detects
     my_bar <- ggplot2::ggplot() +
@@ -641,7 +616,7 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
       ggplot2::xlab("ND") +
       ggplot2::ylab('Number of Measurements') +
       ggplot2::scale_fill_manual(values = c("#1F968BFF", "#440154FF")) +
-      ggplot2::theme(axis.line = element_line(linewidth = 0.75))
+      ggplot2::theme(axis.line = ggplot2::element_line(linewidth = 0.75))
 
     # Creating a dynamic y axis that will scale with the largest count in either the histogram or the ND plots.
     data_histogram <- ggplot2::ggplot_build(my_histogram) # pulling count data from histogram

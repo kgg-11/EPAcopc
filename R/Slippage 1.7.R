@@ -221,7 +221,7 @@ slippage <- function(site, nd.s=site$nondetect, background, nd.b=background$nond
     cat(row, "\n")
     cat(
       paste("SAMPLE SIZE:", "\t",
-            "Required (power):"),
+            "Recommended (power):"),
       paste0(nreq, " (", power, ")"),
       paste(
         "\t" ,
