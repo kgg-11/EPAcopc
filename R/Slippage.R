@@ -281,7 +281,6 @@ slippage <-
     } else {
       cat(row, "\n")
       cat(paste("Measured Concentrations:", "\n"))
-      #cat(paste(rep("-", 24), collapse=""), "\n")
       cat(
         paste(
           "Max background (MBC):",
@@ -410,11 +409,11 @@ slippage <-
         common.legend = TRUE,
         legend = "top",
         legend.grob = my_legend,
-        widths = c(0.15, 1), # relative widths of bar:histogram... might need to tweak this more to make it dynamic
+        widths = c(0.15, 1), # relative widths of bar + histogram plots
         align = "h" # align the horizontal axes
       )
     print(figure_slippage)
-# Output that is saved within the object
+# Output that is saved if slippage is assigned to an object
     my_list<- list(
     alpha= alpha,
     power=power,
