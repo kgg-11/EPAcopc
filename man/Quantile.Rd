@@ -68,7 +68,11 @@ Quantile(
   epsilon = 0.5,
   power = 0.8,
   site = example_site,
+  measure.s = example_site$samples,
+  nd.s = example_site$nondetect,
   background = example_background,
+  measure.b = example_background$samples,
+  nd.b = example_background$nondetect,
   plot = TRUE
 )
 }

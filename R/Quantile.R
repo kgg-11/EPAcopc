@@ -35,7 +35,11 @@
 #'   epsilon = 0.5,
 #'   power = 0.8,
 #'   site = example_site,
+#'   measure.s = example_site$samples,
+#'   nd.s = example_site$nondetect,
 #'   background = example_background,
+#'   measure.b = example_background$samples,
+#'   nd.b = example_background$nondetect,
 #'   plot = TRUE
 #' )
 #' @export
@@ -44,15 +48,14 @@
 
 
 Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, background, measure.b = background$measurement, nd.b = background$nondetect, alpha=0.05, epsilon, power=0.80, print=TRUE, plot=FALSE){
- 
-  # immediately renaming measure.s and measure,b to "samples" for users to have flexibility in their data frame's naming scheme while using this current version of code
+  # immediately renaming measure.s and measure,b to "samples"  allow users to have some flexibility while using this current version of the Quantile test
+  
   site$samples <- measure.s
   background$samples <- measure.b
   site$nondetect <- nd.s
   background$nondetect <- nd.b
   
-  
-   ###step 1:####
+  ###step 1:####
   ## determine sample size needed for both m (background) and n (site) ##
   # based off epsilon anc power input#
   table_4.4 <- data.frame (epsilon.choices = c(0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.0),
@@ -482,11 +485,7 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
   
   ### Step 5: ###
   # subset sorted_pooled to include only detects, then run the rest if this code based off that detectable only data
-  sorted_pooled <- subset(sorted_pooled, 
-                          
-                          
-                          
-                          ==0) #0 is a detectable location
+  sorted_pooled <- subset(sorted_pooled, nondetect==0) #0 is a detectable location
   ## From sorted list, determine if k >= r ##
   # k is amount of samples from largest r values that are from site ##
   #first, extract "r" largest samples from the pooled data
