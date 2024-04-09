@@ -6,11 +6,11 @@
 \usage{
 slippage(
   site,
+  measure.s = site$measurement,
   nd.s = site$nondetect,
   background,
-  nd.b = background$nondetect,
-  measure.s = site$measurement,
   measure.b = background$measurement,
+  nd.b = background$nondetect,
   epsilon,
   alpha = 0.05,
   power = 0.8,
@@ -21,15 +21,15 @@ slippage(
 \arguments{
 \item{site}{A dataframe for site measurements.}
 
+\item{measure.s}{Variable for \code{site} measurements that provides the corresponding concentration. Default is a column of site dataframe named measurement (\code{site$measurement}).}
+
 \item{nd.s}{Indicator variable for \code{site} measurements that determines if the corresponding measurement (row) is a nondetect. A value of \code{1} indicates that the row is a nondetect (\code{0} is a detected measurement). Default is a column of site dataframe named nondetect (\code{site$nondetect}).}
 
 \item{background}{A dataframe for background measurements.}
 
-\item{nd.b}{Indicator variable for \code{background} measurements that determines if the corresponding measurement (row) is a nondetect. A value of \code{1} indicates that the row is a nondetect (\code{0} is a detected measurement). Default is a column of background dataframe named nondetect (\code{background$nondetect}).}
-
-\item{measure.s}{Variable for \code{site} measurements that provides the corresponding concentration. Default is a column of site dataframe named measurement (\code{site$measurement}).}
-
 \item{measure.b}{Variable for \code{background} measurements that provides the corresponding concentration. Default is a column of background dataframe named measurement (\code{background$measurement}).}
+
+\item{nd.b}{Indicator variable for \code{background} measurements that determines if the corresponding measurement (row) is a nondetect. A value of \code{1} indicates that the row is a nondetect (\code{0} is a detected measurement). Default is a column of background dataframe named nondetect (\code{background$nondetect}).}
 
 \item{epsilon}{A proportion of the site that has concentrations greater than the background. Refer to Table 4.3 of corresponding literature for possible values.}
 
