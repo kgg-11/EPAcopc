@@ -48,6 +48,7 @@
 
 
 Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, background, measure.b = background$measurement, nd.b = background$nondetect, alpha=0.05, epsilon, power=0.80, print=TRUE, plot=FALSE){
+
   # immediately renaming measure.s and measure,b to "samples"  allow users to have some flexibility while using this current version of the Quantile test
   
   site$samples <- measure.s
