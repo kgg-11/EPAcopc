@@ -46,9 +46,9 @@ Perform quantile test.
 }
 \details{
 Based off the protocols described in "Guidance for Environmental Background Analysis Volume III: Groundwater" (2003), the Quantile test is used to help answer the question: are concentrations of the target chemical within the site greater than the background concentration?
-The test declares a chemical a COPC if k or more of the r measurments are from the site.
+The test declares a chemical a COPC if k or more of the r measurements are from the site.
 While the quantile test does not make assumptions of underlying distributions for the site and background distributions, some assumptions must still be met.
-In particular, all nondetects must be smaller than the largest "r" measurements in the pooled dataset.
+In particular, all nondetects must be smaller than the largest "r" measurements in the pooled data set.
 The referenced literature provides the other assumptions with the Quantile test in Table 4-1, as well as advantages and disadvantages to this test.
 }
 \examples{
