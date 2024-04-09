@@ -512,7 +512,6 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
     if (sum_r_samples >= k) {
       cat(row, "\n")
       cat(paste("Measurements:", "\n"))
-      #cat(paste(rep("-", 24), collapse=""), "\n")
       cat(
         paste(
           "Amount of largest values (r):",
@@ -529,15 +528,9 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
       )
       cat(paste("DECISION:", "\t","Reject null hypothesis. There is evidence that this is a COPC.", "\n"))
       cat(row, "\n")
-      ########## Old output for reject null
-      # cat(row, "\n")
-      # cat(paste("Decision:", "\n"))
-      # cat(paste("Reject null hypothesis. There is evidence that this is a COPC.", "\n"))
-      # cat(row, "\n")
     } else {
       cat(row, "\n")
       cat(paste("Measurements:", "\n"))
-      #cat(paste(rep("-", 24), collapse=""), "\n")
       cat(
         paste(
           "Amount of largest values (r):",
@@ -618,7 +611,7 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
       ggplot2::scale_x_continuous(expand = c(0, 0)) +
       # legend customization
       ggplot2::scale_fill_manual(
-        values = c("#1F968BFF", "#440154FF", "#FDE725FF", "black"), # i dont know why the coloring needs to be gold then black instead of black then gold
+        values = c("#1F968BFF", "#440154FF", "#FDE725FF", "black"),
         name = "Measurement",
         labels = c("Background","Site","Site measurements within r","r")
       ) +
