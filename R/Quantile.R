@@ -35,7 +35,11 @@
 #'   epsilon = 0.5,
 #'   power = 0.8,
 #'   site = example_site,
+#'   measure.s = example_site$samples,
+#'   nd.s = example_site$nondetect,
 #'   background = example_background,
+#'   measure.b = example_background$samples,
+#'   nd.b = example_background$nondetect,
 #'   plot = TRUE
 #' )
 #' @export
@@ -44,6 +48,13 @@
 
 
 Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, background, measure.b = background$measurement, nd.b = background$nondetect, alpha=0.05, epsilon, power=0.80, print=TRUE, plot=FALSE){
+  # immediately renaming measure.s and measure,b to "samples"  allow users to have some flexibility while using this current version of the Quantile test
+  
+  site$samples <- measure.s
+  background$samples <- measure.b
+  site$nondetect <- nd.s
+  background$nondetect <- nd.b
+
   ###step 1:####
   ## determine sample size needed for both m (background) and n (site) ##
   # based off epsilon anc power input#
@@ -121,7 +132,7 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
   # List pooled site and background from smallest to largest #
   site$source <- 1 #deciding that site is a 1
   background$source <- 0 # deciding that background is a 0
-  pooled_samples <- rbind(site, background)
+  pooled_samples <- plyr::rbind.fill(site, background)
   sorted_pooled <- dplyr::arrange(pooled_samples, samples)
   
   ## Step 4: ##
