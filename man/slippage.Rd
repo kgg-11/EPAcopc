@@ -21,17 +21,17 @@ slippage(
 \arguments{
 \item{site}{A dataframe for site measurements.}
 
-\item{nd.s}{Indicator variable for \code{site} measurements that determines if the corresponding measurement (row) is a nondetect. A value of \code{1} indicates that the row is a nondetect (\code{0} is a detected measurement).}
+\item{nd.s}{Indicator variable for \code{site} measurements that determines if the corresponding measurement (row) is a nondetect. A value of \code{1} indicates that the row is a nondetect (\code{0} is a detected measurement). Default is a column of site dataframe named nondetect (\code{site$nondetect}).}
 
 \item{background}{A dataframe for background measurements.}
 
-\item{nd.b}{Indicator variable for \code{background} measurements that determines if the corresponding measurement (row) is a nondetect. A value of \code{1} indicates that the row is a nondetect (\code{0} is a detected measurement).}
+\item{nd.b}{Indicator variable for \code{background} measurements that determines if the corresponding measurement (row) is a nondetect. A value of \code{1} indicates that the row is a nondetect (\code{0} is a detected measurement). Default is a column of background dataframe named nondetect (\code{background$nondetect}).}
 
-\item{measure.s}{Variable for \code{site} measurements that provides the corresponding concentration.}
+\item{measure.s}{Variable for \code{site} measurements that provides the corresponding concentration. Default is a column of site dataframe named measurement (\code{site$measurement}).}
 
-\item{measure.b}{Variable for \code{background} measurements that provides the corresponding concentration.}
+\item{measure.b}{Variable for \code{background} measurements that provides the corresponding concentration. Default is a column of background dataframe named measurement (\code{background$measurement}).}
 
-\item{epsilon}{A number. Refer to Table 4.3 of corresponding literature for possible values.}
+\item{epsilon}{A proportion of the site that has concentrations greater than the background. Refer to Table 4.3 of corresponding literature for possible values.}
 
 \item{alpha}{Type I error rate. Options are only \code{0.05} (default) or \code{0.01}.}
 
@@ -57,6 +57,7 @@ Perform slippage test.
 }
 \details{
 The slippage test is one of multiple possible nonparametric tests described in "Guidance for Environmental Background Analysis Volume III: Groundwater" (2003) for determining if a chemical is a Chemical of Potential Concern (COPC).
+Although the slippage test has the advantage of not making any assumptions on the distribution of either site or background measurements, there are still assumptions that need to be met for performing the slippage test. 
 There are multiple assumptions that need to be upheld during the usage of the \code{slippage()} function.
 The maximum background measurement must be a detected measurement; otherwise, an error is generated.
 Other conditions are implemented based on the included values in certain tables of the corresponding literature.
