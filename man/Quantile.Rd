@@ -21,7 +21,15 @@ Quantile(
 \arguments{
 \item{site}{Dataframe for site measurements.}
 
+\item{measure.s}{Variable for \code{site} measurements that provides the corresponding concentration.}
+
+\item{nd.s}{Indicator variable for \code{site} measurements that determines if the corresponding measurement (row) is a nondetect. A value of \code{1} indicates that the row is a nondetect (\code{0} is a detected measurement).}
+
 \item{background}{Dataframe for background measurements.}
+
+\item{measure.b}{Variable for \code{background} measurements that provides the corresponding concentration.}
+
+\item{nd.b}{Indicator variable for \code{background} measurements that determines if the corresponding measurement (row) is a nondetect. A value of \code{1} indicates that the row is a nondetect (\code{0} is a detected measurement).}
 
 \item{alpha}{Type I error rate. Options are only \code{0.01}, \code{0.025}, \code{0.05}, or \code{0.10}. Must be manually input. (default is \code{0.05})}
 
@@ -30,28 +38,25 @@ Quantile(
 \item{power}{Statistical power. Options are only \code{0.80} or \code{0.90}. Must be manually input. (default is \code{0.80})}
 
 \item{print}{Logical. Will display quantile test results. (default is \code{TRUE})}
+
+\item{plot}{Logical. Will display a histogram of the site and background measurements with other details. (default is \code{FALSE})}
 }
 \description{
 Perform quantile test.
 }
+\details{
+Based off the protocols described in "Guidance for Environmental Background Analysis Volume III: Groundwater" (2003), the Quantile test is used to help answer the question: are concentrations of the target chemical within the site greater than the background concentration?
+The test declares a chemical a COPC if k or more of the r measurments are from the site.
+While the quantile test does not make assumptions of underlying distributions for the site and background distributions, some assumptions must still be met.
+In particular, all nondetects must be smaller than the largest "r" measurements in the pooled dataset.
+The referenced literature provides the other assumptions with the Quantile test in Table 4-1, as well as advantages and disadvantages to this test.
+}
 \examples{
 # example code
-example_site <-
-  data.frame(
-    samples = c(15, 15, 17, 23, 16, 30, 60, 89, 90, 100),
-    nondetect = c(1, rep(0, 9))
-  )
-example_background <-
-  data.frame(
-    samples = c(23, 36, 30, 37, 44, 57, 60, 61, 61, 79),
-    nondetect = c(1, 1, rep(0, 8))
-  )
-Quantile(
-  alpha = 0.05,
-  epsilon = 0.5,
-  power = 0.8,
-  site = example_site,
-  background = example_background,
-  plot = TRUE
-)
+example_site <- data.frame(samples=c(15, 15, 17, 23, 16, 30, 60, 89, 90, 100), nondetect = c(1,rep(0,9)))
+example_background <- data.frame(samples=c(23, 36, 30, 37, 44, 57, 60, 61, 61, 79), nondetect = c(1,1,rep(0,8)))
+Quantile(alpha = 0.05, epsilon = 0.5, power = 0.8, site = example_site, background = example_background, plot=T)
+}
+\references{
+Naval Facilities Engineering Command. (2003, October).  *Guidance for Environmental Background Analysis Volume III: Groundwater.* https://vsp.pnnl.gov/docs/Draft_Guidance_for_Review.pdf.
 }
