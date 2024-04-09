@@ -90,5 +90,5 @@ example1 <- slippage(
 example1
 }
 \references{
-Naval Facilities Engineering Command. (2003, October).  *Guidance for Environmental Background Analysis Volume III: Groundwater.* https://vsp.pnnl.gov/docs/Draft_Guidance_for_Review.pdf.
+Naval Facilities Engineering Command. (2003, October).  \emph{Guidance for Environmental Background Analysis Volume III: Groundwater.} https://vsp.pnnl.gov/docs/Draft_Guidance_for_Review.pdf.
 }
