@@ -68,9 +68,24 @@ Other conditions are implemented based on the included values in certain tables 
 }
 \examples{
 set.seed(4321)
-example_site <- data.frame(measure=round(rchisq(n=50, df=5, ncp=6), 1), nondetect=rbinom(n=50, size=1, p=0.2))
-example_background <-data.frame(measure=round(rchisq(n=50, df=5), 1), nondetect=rbinom(n=50, size=1, p=0.2))
-example1 <- slippage(site=example_site, measure.s=example_site$measure, nd.s = example_site$nondetect, background=example_background, measure.b=example_background$measure, nd.b=example_background$nondetect, epsilon=0.6, plot=TRUE)
+example_site <-
+  data.frame(measure = round(rchisq(
+    n = 50, df = 5, ncp = 6
+  ), 1),
+  nondetect = rbinom(n = 50, size = 1, p = 0.2))
+example_background <-
+  data.frame(measure = round(rchisq(n = 50, df = 5), 1),
+             nondetect = rbinom(n = 50, size = 1, p = 0.2))
+example1 <- slippage(
+  site = example_site,
+  measure.s = example_site$measure,
+  nd.s = example_site$nondetect,
+  background = example_background,
+  measure.b = example_background$measure,
+  nd.b = example_background$nondetect,
+  epsilon = 0.6,
+  plot = TRUE
+)
 example1
 }
 \references{

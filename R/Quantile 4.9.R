@@ -9,9 +9,24 @@
 #' @param print Logical. Will display quantile test results. (default is \code{TRUE})
 #' @examples
 #' # example code
-#' example_site <- data.frame(samples=c(15, 15, 17, 23, 16, 30, 60, 89, 90, 100), nondetect = c(1,rep(0,9)))
-#' example_background <- data.frame(samples=c(23, 36, 30, 37, 44, 57, 60, 61, 61, 79), nondetect = c(1,1,rep(0,8)))
-#' Quantile(alpha = 0.05, epsilon = 0.5, power = 0.8, site = example_site, background = example_background, plot=T)
+#' example_site <-
+#'   data.frame(
+#'     samples = c(15, 15, 17, 23, 16, 30, 60, 89, 90, 100),
+#'     nondetect = c(1, rep(0, 9))
+#'   )
+#' example_background <-
+#'   data.frame(
+#'     samples = c(23, 36, 30, 37, 44, 57, 60, 61, 61, 79),
+#'     nondetect = c(1, 1, rep(0, 8))
+#'   )
+#' Quantile(
+#'   alpha = 0.05,
+#'   epsilon = 0.5,
+#'   power = 0.8,
+#'   site = example_site,
+#'   background = example_background,
+#'   plot = TRUE
+#' )
 #' @export
 
 
