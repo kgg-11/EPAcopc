@@ -7,7 +7,8 @@ Authors@R: c(
     person("Nick", "Heaton", email = "njh52@pitt.edu", role = "aut"),
     person("Maggie","Hines", email = "MGH42@pitt.edu", role = "aut"))
 Maintainer: The package maintainer <kgg11@pitt.edu>
-Description: In accordance with the September 2000 Navy policy, Interim Final Policy on the Use of Background Chemicals, the EPA has required cleanup efforts to address chemicals that were released on site and considered chemicals of potential concern (COPCs). To do this, Naval facilities need to be able to distinguish chemical concentrations that were released on site from background chemicals that the EPA does not consider paramount to cleanup efforts. The nonparametric tests included in this package are the Slippage, Quantile, and Gehan tests. Reference: \href{https://vsp.pnnl.gov/docs/Draft_Guidance_for_Review.pdf/}{Guidance for Environmental Background Analysis Volume III: Groundwater (2003)}
+Description: 
+    In accordance with the September 2000 Navy policy, Interim Final Policy on the Use of Background Chemicals, the EPA has required cleanup efforts to address chemicals that were released on site and considered chemicals of potential concern (COPCs). To do this, Naval facilities need to be able to distinguish chemical concentrations that were released on site from background chemicals that the EPA does not consider paramount to cleanup efforts. The nonparametric tests included in this package are the Slippage, Quantile, and Gehan tests.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
