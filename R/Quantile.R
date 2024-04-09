@@ -1,5 +1,5 @@
 ########## FUNCTION : Quantile  #######################
-#' Perform quantile test.
+##' Perform quantile test.
 #'
 #' @param site Dataframe for site measurements.
 #' @param measure.s Variable for \code{site} measurements that provides the corresponding concentration.
@@ -20,13 +20,26 @@
 #' 
 #' @examples
 #' # example code
-#' example_site <- data.frame(samples=c(15, 15, 17, 23, 16, 30, 60, 89, 90, 100), nondetect = c(1,rep(0,9)))
-#' example_background <- data.frame(samples=c(23, 36, 30, 37, 44, 57, 60, 61, 61, 79), nondetect = c(1,1,rep(0,8)))
-#' Quantile(alpha = 0.05, epsilon = 0.5, power = 0.8, site = example_site, background = example_background, plot=T)
+#' example_site <-
+#'   data.frame(
+#'     samples = c(15, 15, 17, 23, 16, 30, 60, 89, 90, 100),
+#'     nondetect = c(1, rep(0, 9))
+#'   )
+#' example_background <-
+#'   data.frame(
+#'     samples = c(23, 36, 30, 37, 44, 57, 60, 61, 61, 79),
+#'     nondetect = c(1, 1, rep(0, 8))
+#'   )
+#' Quantile(
+#'   alpha = 0.05,
+#'   epsilon = 0.5,
+#'   power = 0.8,
+#'   site = example_site,
+#'   background = example_background,
+#'   plot = TRUE
+#' )
 #' @export
 #' @references Naval Facilities Engineering Command. (2003, October).  *Guidance for Environmental Background Analysis Volume III: Groundwater.* https://vsp.pnnl.gov/docs/Draft_Guidance_for_Review.pdf.
-
-
 
 
 
@@ -89,7 +102,7 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
                            alpha = alpha,
                            table_4.4 = table_4.4)
   print(c("minimum sample sizes for both site and background samples is: " , nreq))
-
+  
   ## Step 2: ##
   # Check if provided sample sizes are enough for desired power, alpha, and epsilon
   #   Include nondetects
@@ -110,7 +123,7 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
   background$source <- 0 # deciding that background is a 0
   pooled_samples <- rbind(site, background)
   sorted_pooled <- dplyr::arrange(pooled_samples, samples)
-
+  
   ## Step 4: ##
   # Find values of r and k needed#
   # based off n (site measurements the columns of arrays) and m (background measurments rows)
@@ -125,10 +138,10 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
   n_ceil <- ceiling(n_divided)
   n_rounded <- (n_ceil * 5)
   n_rounded <- as.character(n_rounded)
-
+  
   ################## ARRAY FOR TABLES ##################
   ################## ALPHA 0.01 ##################
-
+  
   ################ CHANGE O TO NA ##################
   V_r <- c(NA ,NA , 11, 13, 16, 19, 22, 25, 28, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, #row =5
            NA, 6,7, 9, 11, 13, 14, 16, 18, 19, 21, 23, 25, 26, 28, 30, NA, NA, NA, NA, # row =10
@@ -151,7 +164,7 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
            NA, NA, 4, 6, 3, 3, 6, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 6, 7, # row = 95
            NA, NA, 4, 4, 3, 3, 7, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 6 #row = 100
   )
-
+  
   M_r <- matrix(V_r, nrow=20, ncol = 20, byrow=TRUE)
   V_k <- c(NA ,NA , 1, 13, 16, 19, 22, 25, 28, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, #row =5
            NA, 6,7, 9, 11, 13, 14, 16, 18, 19, 21, 23, 25, 26, 28, 30, NA, NA, NA, NA, # row =10
@@ -173,7 +186,7 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
            NA, NA, 3, 3, 3, 3, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6, 6, 7, 7, 7, #row = 90
            NA, NA, 3, 4, 3, 3, 5, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 6, 7, # row = 95
            NA, NA, 3, 3, 3, 3, 5, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 6 #row = 100
-
+           
   )
   M_k <- matrix(V_k, nrow=20, ncol = 20, byrow=TRUE)
   V_a <-c(
@@ -197,18 +210,18 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
     0, 0, 0.009, 0.005, 0.009, 0.014, 0.005, 0.008, 0.011, 0.005, 0.007, 0.009, 0.012, 0.015, 0.008, 0.010, 0.012, 0.014, 0.008, 0.010, # row = 90
     0,0, 0.008, 0.008, 0.008, 0.013, 0.005, 0.007, 0.010, 0.013, 0.006, 0.008, 0.010, 0.013, 0.007, 0.008, 0.010, 0.012, 0.014, 0.008, #row = 95
     0,0, 0.007, 0.014, 0.007, 0.011, 0.013, 0.006, 0.008, 0.011, 0.015, 0.007, 0.009, 0.011, 0.013, 0.007, 0.009, 0.010, 0.012, 0.014 #row 100
-
-
+    
+    
   )
-
+  
   M_a <- matrix(V_a, nrow=20, ncol = 20, byrow=TRUE)
   names <- seq(5, 100, by = 5)
   Array.01 <- array(c(M_r, M_k, M_a), dim=c(20, 20, 3), dimnames=list(names, names))
-
+  
   ################## END FOR ALPHA 0.01 ##################
-
+  
   ################## START FOR ALPHA 0.025 ##################
-
+  
   V_r.025 <- c( NA, NA, 9, 12, 15, 17, 20, 22, 25, rep(NA,11), # row=5
                 NA, 7, 6, 8, 9, 11, 12, 14, 15, 17, 18, 20, 21, 23, 24, 26, 27, rep(NA,3), # row=10
                 11, 6, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 21, 21, 22, 23, # row=15
@@ -252,9 +265,9 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
     NA, NA, 4, 2, 3, 4, 6, 3, 7, 6, 5, 4, 4, 6, 6, 8, 5, 5, 5, 8,
     NA, NA, 3, 2, 3, 4, 5, 3, 3, 8, 5, 5, 4, 4, 6, 8, 8, 5, 5, 5
   )
-
+  
   M_k.025 <- matrix(V_r.025, nrow=20, ncol=20, byrow=TRUE)
-
+  
   V_a.025 <- c(
     NA, NA, 0.030, 0.024, 0.021, 0.026, 0.024, 0.028, 0.025, rep(NA,11),
     NA, 0.029, 0.028, 0.022, 0.029, 0.024, 0.029,0.025, 0.029,0.025, 0.029, 0.026, 0.029, 0.026, 0.029, 0.026, 0.029, NA, NA, NA,
@@ -278,15 +291,15 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
     NA, NA, 0.029, 0.027, 0.025, 0.025, 0.028, 0.022, 0.029, 0.028, 0.022, 0.028, 0.023, 0.027, 0.025, 0.022, 0.028, 0.022, 0.026, 0.030
   )
   M_a.025 <- matrix(V_a.025, nrow=20, ncol = 20, byrow=TRUE)
-
+  
   names <- seq(5, 100, by = 5)
   Array.025 <- array(c(M_r.025, M_k.025, M_a.025), dim=c(20, 20, 3), dimnames=list(names, names))
   Array.025["50", "50",]
-
+  
   ################## END FOR ALPHA 0.025 ##################
-
+  
   ################## ARRAY FOR ALPHA 0.05 ##################
-
+  
   V_r.05 <- c( NA, NA, 8, 10, 13, 15, 17, 19, 21, rep(NA,11),
                NA, 4, 5, 14, 8,9,10,12,13,14,15,17,18,19,20,21,23,rep(NA,3),
                2,3,4,5,6,7,8,9,9,10,11,12,13,14,15,16,16,17,18,19,
@@ -307,7 +320,7 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
                NA,NA,3,5,2,6,6,8,5,3,3,8,6,6,4,4,4,7,10,8,
                NA,NA,3,9,2,2,4,8,10,5,3,3,6,6,9,4,4,4,7,10,
                NA,NA,3,6,5,2,4,6,10,5,3,3,3,6,6,9,4,4,4,7
-
+               
   )
   M_r.05 <-matrix(V_r.05, nrow=20, ncol=20, byrow=TRUE)
   V_k.05 <- c(NA, NA, 8, 10, 13, 15, 17, 19, 21, rep(NA,11),
@@ -330,10 +343,10 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
               NA,NA,2,3,2,4,4,5,4,3,3,6,5,5,4,4,4,6,8,7,
               NA,NA,2,4,2,2,3,5,6,4,3,3,5,5,7,4,4,4,6,8,
               NA,NA,2,3,3,2,3,4,6,4,3,3,3,5,5,7,4,4,4,6
-
+              
   )
   M_k.05 <- matrix(V_k.05, nrow=20, ncol = 20, byrow=TRUE)
-
+  
   V_a.05 <- V_a.05 <- c(
     NA, NA, 0.051, 0.057, 0.043, 0.048, 0.051, 0.054, 0.056, rep(NA, 11),
     NA, 0.043, 0.057, 0.045, 0.046, 0.052, 0.058, 0.046, 0.050, 0.054, 0.057, 0.049, 0.052, 0.055, 0.057, 0.059, 0.053, NA, NA, NA,
@@ -360,7 +373,7 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
   names <- seq(5, 100, by = 5)
   Array.05 <- array(c(M_r.05, M_k.05, M_a.05), dim=c(20, 20, 3), dimnames=list(names, names))
   #Array.05["10","10",]
-
+  
   ################## END FOR ALPHA 0.05 ##################
   ################## START FOR ALPHA 0.10 ##################
   V_r.1 <- c( NA,NA,7,8,10,12,14,15,17,rep(NA,11),
@@ -426,22 +439,22 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
     NA, NA, 0.097, 0.085, 0.119, 0.099, 0.095, 0.093, 0.109, 0.108, 0.114, 0.083, 0.099, 0.082, 0.092, 0.102, 0.112, 0.105, 0.119, 0.113,
     NA, NA, 0.089, 0.100, 0.110, 0.089, 0.084, 0.086, 0.102, 0.117, 0.108, 0.117, 0.088, 0.103, 0.084, 0.094, 0.103, 0.113, 0.106, 0.118,
     NA, NA, 0.082, 0.090, 0.102, 0.080, 0.109, 0.080, 0.095, 0.110, 0.118, 0.109, 0.086, 0.093, 0.108, 0.086, 0.095, 0.104, 0.114, 0.106
-
+    
   )
-
+  
   M_r.1 <- matrix(V_r.1, nrow=20, ncol=20, byrow=TRUE)
   M_k.1 <- matrix(V_k.1, nrow=20, ncol = 20, byrow=TRUE)
   M_a.1 <- matrix(V_a.1, nrow=20, ncol = 20, byrow=TRUE)
   names <- seq(5, 100, by = 5)
   Array.1 <- array(c(M_r.1, M_k.1, M_a.1), dim=c(20, 20, 3), dimnames=list(names, names))
-
-
-
-
-
+  
+  
+  
+  
+  
   ################## END FOR ALPHA 0.10 ##################
   ################## END FOR ARRAY FOR TABLES ##################
-
+  
   # getting r, k, and alpha values based off sample sizes m and n
   r_val <- if (alpha == 0.01){
     Array.01[m_rounded, n_rounded, ]
@@ -458,7 +471,7 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
   print(c("r value: ", r_val[1])) #shows user the r value needed
   print(c("k value: ", r_val[2])) #shows the user the k value
   print(c("alpha value: ", r_val[3])) #shows user the alpha
-
+  
   ### Step 5: ###
   # subset sorted_pooled to include only detects, then run the rest if this code based off that detectable only data
   sorted_pooled <- subset(sorted_pooled, nondetect==0) #0 is a detectable location
@@ -468,14 +481,14 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
   r <- r_val[1] #defines r based off the array
   r_samples <- tail(sorted_pooled, r) # this makes a new data frame consisting of the last r objects
   print(r_samples)
-
+  
   #next, determine if sum of these is greater than or equal to k (site =1)
   k <- r_val[2] #defining "k" value based off array
   sum_r_samples <- (sum(r_samples$source))
-
-
-
-
+  
+  
+  
+  
   ########### RESULTS: #############
   if (print) {
     text.a <- "Quantile Test Results:"
@@ -545,7 +558,7 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
   }
   ######## Plot #########
   if (plot) {
-
+    
     # data needed for plots
     site_sorted <- subset(sorted_pooled, source==1)
     site_sorted$measure_notNDs <- site_sorted$samples 
@@ -553,14 +566,14 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
     background_sorted$measure_notND <- background_sorted$samples 
     r_samples_site <- subset(r_samples, source==1)
     r_samples_site$measures <- r_samples_site$samples
-
+    
     site$ND_tfs <- ifelse(nd.s==1, TRUE, NA)
     background$ND_tf <- ifelse(nd.b == 1, TRUE, NA) # getting rid of zero's and making them NA's for easier usage in ND bar plot
-
+    
     # 2 ways of dynamically changing the bin size...
     #binw <- round(max(site$measure_max_measure, na.rm=T)/20)
     binw2 <- round(max(range(site_sorted$measure_notNDs, na.rm=T),range(background_sorted$measure_notND, na.rm=T))/15)
-
+    
     # Creating histogram
     my_histogram <- ggplot2::ggplot(color = "black") +
       ggplot2::geom_histogram(
@@ -610,7 +623,7 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
         labels = c("Background","Site","Site measurements within r","r")
       ) +
       ggplot2::theme(axis.line = ggplot2::element_line(linewidth = 0.75))
-
+    
     # # Creating bar chart of non-detects
     my_bar <- ggplot2::ggplot() +
       ggplot2::geom_bar(
@@ -630,22 +643,22 @@ Quantile <- function(site, measure.s = site$measurement, nd.s = site$nondetect, 
       ggplot2::ylab('Number of Measurements') +
       ggplot2::scale_fill_manual(values = c("#1F968BFF", "#440154FF")) +
       ggplot2::theme(axis.line = ggplot2::element_line(linewidth = 0.75))
-
+    
     # Creating a dynamic y axis that will scale with the largest count in either the histogram or the ND plots.
     data_histogram <- ggplot2::ggplot_build(my_histogram) # pulling count data from histogram
     data_bar <- ggplot2::ggplot_build(my_bar) # pulling count data from bar chart
     max_counts_histogram <- max(data_histogram$data[[1]]$count, data_histogram$data[[2]]$count) # taking max counts from either site/background
     max_counts_bar <- max(data_bar$data[[1]]$count, data_bar$data[[2]]$count) # taking max counts from either site/background
     max_counts <- max(max_counts_histogram, max_counts_bar) # finding absolute max counts
-
+    
     my_bar <- my_bar +
       ggplot2::scale_y_continuous(limits = c(0,max_counts), expand=c(0,0)) # how to create the dynamic y-axis
     my_histogram <- my_histogram +
       ggplot2::scale_y_continuous(limits = c(0,max_counts), expand=c(0,0)) # how to create the dynamic y-axis
-
+    
     # Putting final figure together with bar plot and histogram side-by-side (using `ggpubr` package)
     my_legend <- ggpubr::get_legend(my_histogram) # using legend information from histogram
-
+    
     figure_quantile <-
       ggpubr::ggarrange(
         my_bar + ggpubr::rremove("x.text") + ggpubr::rremove("x.ticks"), # removing parts of axis not needed
