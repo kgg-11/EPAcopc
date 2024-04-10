@@ -34,10 +34,8 @@
 #' @examples
 #' set.seed(4321)
 #' example_site <-
-#'   data.frame(measure = round(rchisq(
-#'     n = 50, df = 5, ncp = 6
-#'   ), 1),
-#'   nondetect = rbinom(n = 50, size = 1, p = 0.2))
+#'   data.frame(measure = round(rchisq(n = 50, df = 5, ncp = 6), 1),
+#'              nondetect = rbinom(n = 50, size = 1, p = 0.2))
 #' example_background <-
 #'   data.frame(measure = round(rchisq(n = 50, df = 5), 1),
 #'              nondetect = rbinom(n = 50, size = 1, p = 0.2))
@@ -76,7 +74,7 @@ slippage <-
       if (any(background_detects$measure>max(background_nondetects$measure))) {
         TRUE
       } else {
-        stop("Assumption violated: Max background measurement is a non-detect")
+        stop("Assumption violated: Max background measurement is a nondetect")
       }
     } else {TRUE}
 
@@ -104,7 +102,7 @@ slippage <-
   }
   nreq <- n.required(epsilon, power, table_4.3) # saves output of n.required to a new value
 
-  # check if required sample size (including non-detects) is enough for power desired
+  # check if required sample size (including nondetects) is enough for power desired
   m <- nrow(background) # nondetects included
   n <- nrow(site) #nondetects included
   condition_sampleSize <- if (n >= nreq & m >= nreq) {
@@ -121,7 +119,7 @@ slippage <-
   k <- sum(site_detects>maxbg) # number of site measurements > max background measurement (both detects only)
 
   ############ CRITICAL VALUE TABLE BELOW: ############  #############################
-  # m and n (non-detects included) are used as indices.
+  # m and n (nondetects included) are used as indices.
   table_B2 <- as.matrix(read.table(text = "/ / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
 / / / / / / / / / / / / 13 14 15 16 17 18 19 20 21 22 23 23 24 25 26 27 28 29 30 31 32 32 33 34 35 36 37 38 39 40 41 41 42 43 44 45 46 47
 / / / / / / 7 8 9 10 11 11 12 13 14 15 15 16 17 18 18 19 20 21 22 22 23 24 25 26 26 27 28 29 30 30 31 32 33 33 34 35 36 37 37 38 39 40 40 41
@@ -365,7 +363,7 @@ slippage <-
       ) +
       ggplot2::theme(axis.line = ggplot2::element_line(linewidth = 0.75))
 
-    # Creating bar chart of non-detects
+    # Creating bar chart of nondetects
     my_bar <- ggplot2::ggplot() +
       ggplot2::geom_bar(
         data = subset(site,!is.na(ND_tfs)), # Site bars
