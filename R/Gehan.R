@@ -2,12 +2,8 @@
 ##' Perform Gehan test.
 #'
 #' @param site A dataframe for site measurements. Includes one column of measurements and one column of detect/nondetect designation. 
-#' @param background A dataframe for site measurements. Includes one column of measurements and one column of detect/nondetect designation.
-#' @param nd.s Indicator variable for \code{site} measurements that determines if the corresponding measurement (row) is a nondetect. A value of \code{1} indicates that the row is a nondetect (\code{0} is a detected measurement). Default is a column of site dataframe named nondetect (\code{site$nondetect}).
-#' @param background A dataframe for background measurements.
-#' @param measure.b Variable for \code{background} measurements that provides the corresponding concentration. Default is a column of background dataframe named measurement (\code{background$measurement}).
-#' @param nd.b Indicator variable for \code{background} measurements that determines if the corresponding measurement (row) is a nondetect. A value of \code{1} indicates that the row is a nondetect (\code{0} is a detected measurement). Default is a column of background dataframe named nondetect (\code{background$nondetect}).
-#' @param epsilon  A proportion of the site that has concentrations greater than the background. Refer to Table 4.3 of referenced literature for possible values.
+#' @param background A dataframe for background measurements. Includes one column of measurements and one column of detect/nondetect designation..
+#' @param deltaS  Magnitude of the difference in median site and background concentrations.
 #' @param alpha Type I error rate. Options are \code{0.05} (default), \code{0.01}, or \code{0.10}.
 #' @param power Statistical power. Options are \code{0.75} (default), \code{0.90}, or \code{0.95}.
 #' @param plot Logical. Will display a histogram of the site and background measurements with other details. (default is \code{FALSE})
