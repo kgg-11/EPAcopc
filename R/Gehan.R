@@ -245,7 +245,33 @@ gehan <- function(site, background, alpha, deltaS, power, print=TRUE, plot=TRUE)
   ### 7) Compare to normal distribution 
   p_val <- pnorm(G, lower.tail = FALSE)
   
-  ### 8) Print conclusions 
+  
+  ### 8) Plots 
+  if(plot == TRUE) { 
+    binw3 <- round(max(range(site$samples),range(background$samples))/5)
+    
+    my_histogram <- ggplot2::ggplot() + 
+      ggplot2::geom_histogram(data = background, 
+                              ggplot2::aes(x = samples, col = I("black"), fill = "b"), 
+                              alpha = 0.8, bins = binw3) +
+      ggplot2::geom_histogram(data = site, 
+                              ggplot2::aes(x = samples, col = I("black"), fill = "r"), 
+                              alpha = 0.8, bins = binw3) +
+      ggplot2::scale_fill_manual(name ="Measurement ID", 
+                                 values = c("r" = "#1F968BFF", "b" = "#440154FF"), 
+                                 labels=c("b" = "background", "r" = "site")) +
+      ggplot2::geom_vline(ggplot2::aes(xintercept = median(site$samples)),
+                          col='#00CFAC', size=1, linetype = "dashed") + 
+      ggplot2::geom_vline(ggplot2::aes(xintercept = median(background$samples)), 
+                          col='#BD00FF', size=1, linetype = "dashed") + 
+      ggplot2::theme_classic() +
+      ggplot2::xlab("COPC Concentration") + 
+      ggplot2::ylab("Number of Measurements")
+    
+    print(my_histogram)
+  } 
+  
+  ### 9) Print conclusions 
   
   if (print) {
     text.c <- "Gehan Test Results:"
@@ -298,6 +324,9 @@ gehan <- function(site, background, alpha, deltaS, power, print=TRUE, plot=TRUE)
       cat(row, "\n")
     }
   }
+  
+  ### 10) Output results if an object has been defined 
+  
   Gehan_results <- as.data.frame(sorted_meas)
   colnames(Gehan_results) = c("Samp Measurement", "Detect (Y/N)", "Samp Location", 
                               "d", "e", "R", "aR")
