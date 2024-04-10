@@ -70,10 +70,8 @@ Other conditions are implemented based on the included values in certain tables 
 \examples{
 set.seed(4321)
 example_site <-
-  data.frame(measure = round(rchisq(
-    n = 50, df = 5, ncp = 6
-  ), 1),
-  nondetect = rbinom(n = 50, size = 1, p = 0.2))
+  data.frame(measure = round(rchisq(n = 50, df = 5, ncp = 6), 1),
+             nondetect = rbinom(n = 50, size = 1, p = 0.2))
 example_background <-
   data.frame(measure = round(rchisq(n = 50, df = 5), 1),
              nondetect = rbinom(n = 50, size = 1, p = 0.2))
