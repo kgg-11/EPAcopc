@@ -28,10 +28,8 @@
 #'      \item \code{e} - Rank determining variable 2. 
 #'      \item \code{R} - Calculated rank. 
 #'   \item \code{aR} - Calculated rank score. 
-#' @return A list of the test parameters and statistics: 
-#'  
-#' 
 #' }
+#' 
 #' @details The Gehan test is a nonparametric test that is useful for detecting differences in the median chemical concentrations of 
 #' site and background measurements. It is functionally is similar to the more commonly used Wilcoxon-Rank Sum (WRS) test, but it is 
 #' more powerful in situations where sample size is small, there is a significant number of nondetect measurements, and the measurements 
