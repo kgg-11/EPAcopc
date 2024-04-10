@@ -65,7 +65,6 @@ slippage <-
            power = 0.80,
            print = TRUE,
            plot = FALSE) {
-    
   ############ Condition check: if (any row(background|nondetect=False))>max(background|nondetect=True)   ############
   background_detects <- subset(background, nd.b==0)
   background_nondetects <- subset(background, nd.b==1)
@@ -110,7 +109,10 @@ slippage <-
   } else {
     warning("Sample size is small for power desired")
   }
-
+  
+  condition_sampleSizeBounds <- if (m < 1 || m > 50 || n < 1 || n > 50) {
+    stop("Sample size must be between 1 and 50")
+  }
   ############ K Calculation  ############
   # Count the number, K, of detected site measurements that are larger than the largest detected background measurement. In making this determination, ignore all nondetects in the site dataset
   maxbg <- max(background_detects)  # max background measurement that is detected
@@ -235,9 +237,14 @@ slippage <-
   } else if (alpha == 0.05) {
     Kc[[m, n, 2]]
   } else {
-    stop("Critical value not found, check sample size is between 1-50")
+    stop("Invalid alpha value, must be 0.05 or 0.01")
   }
 
+  Kc_missingValues <- if (is.na(critical_value)) {
+    stop("Critical value located in Table B-2 or B-3 is missing for given parameters")
+  }
+  
+  
   ########### RESULTS: #############
   if (print) {
     text.a <- "Slippage Test Results:"
@@ -422,6 +429,4 @@ slippage <-
   )
   my_list
   }
-
 }
-
