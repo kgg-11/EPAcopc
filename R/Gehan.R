@@ -40,10 +40,20 @@
 #' the resulting statistics, and the data frame used to calculate the ranks and scores of each observation. 
 #'
 #' @examples
-#' site_ex1 <- data.frame(samples=c(2, 4, 8, 17, 20, 25, 34, 35, 40, 43), nondetect = c(0, 1, rep(0, 5), 1, rep(0,2)))
-#' bck_ex1 <- data.frame(samples=c(1, 4, 5, 7, 12, 15, 18, 21, 25, 27), nondetect = c(0, 1, 0, 0, 1, 0, 0, 1, 1, 0))
-
+#' Actual Data (ex 4-12 from EPA)
+#' site_ex <- data.frame(samples=c(2, 4, 8, 17, 20, 25, 34, 35, 40, 43), nondetect = c(0, 1, rep(0, 5), 1, rep(0,2)))
+#' bck_ex <- data.frame(samples=c(1, 4, 5, 7, 12, 15, 18, 21, 25, 27), nondetect = c(0, 1, 0, 0, 1, 0, 0, 1, 1, 0))
 #' G_result <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex1, background = bck_ex1) 
+#' 
+#' Randomized Data 
+#' site_ex_random <- data.frame(samples = c(floor(runif(15, 1, 50))), nondetect = c(floor(runif(15, 0, 2))))
+#' bck_ex_random <- data.frame(samples = c(floor(runif(15, 1, 50))), nondetect = c(floor(runif(15, 0, 2))))
+#' G_result_random <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex2, background = bck_ex2)
+#' 
+#' Uneven Number of Site and Background Measurements
+#' site_ex_uneven <- data.frame(samples = c(floor(runif(15, 1, 50))), nondetect = c(floor(runif(15, 0, 2))))
+#' bck_ex_uneven <- data.frame(samples = c(floor(runif(20, 1, 50))), nondetect = c(floor(runif(20, 0, 2))))
+#' G_result_uneven <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex3, background = bck_ex3)
 #' 
 #' @export
 #' @references Naval Facilities Engineering Command. (2003, October).  \emph{Guidance for Environmental Background Analysis Volume III: Groundwater.} https://vsp.pnnl.gov/docs/Draft_Guidance_for_Review.pdf.
@@ -240,8 +250,8 @@ gehan <- function(site,
   
   ### 6) Calculate Gehan statistic 
   
-  m = nrow(bck_ex1)
-  n = nrow(site_ex1)
+  m = nrow(background)
+  n = nrow(site)
   
   sum_site = with(sorted_meas, sum(aR[h == 1]))
   
