@@ -43,14 +43,14 @@
 #' Actual Data (ex 4-12 from EPA)
 #' site_ex <- data.frame(samples=c(2, 4, 8, 17, 20, 25, 34, 35, 40, 43), nondetect = c(0, 1, rep(0, 5), 1, rep(0,2)))
 #' bck_ex <- data.frame(samples=c(1, 4, 5, 7, 12, 15, 18, 21, 25, 27), nondetect = c(0, 1, 0, 0, 1, 0, 0, 1, 1, 0))
-#' G_result <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex1, background = bck_ex1) 
+#' G_result <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex, background = bck_ex) 
 #' 
 #' Randomized Data 
 #' site_ex_random <- data.frame(samples = c(floor(runif(15, 1, 50))), nondetect = c(floor(runif(15, 0, 2))))
-#' bck_ex_random <- data.frame(samples = c(floor(runif(15, 1, 50))), nondetect = c(floor(runif(15, 0, 2))))
-#' G_result_random <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex2, background = bck_ex2)
+#' bck_ex_random <- data.frame(samples = c(floor(runif(15, 1, 40))), nondetect = c(floor(runif(15, 0, 2))))
+#' G_result_random <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex_random, background = bck_ex_random)
 #' 
-#' Uneven Number of Site and Background Measurements
+#' Uneven Number of Site and Background Measurements - Not Recommended by EPA 
 #' site_ex_uneven <- data.frame(samples = c(floor(runif(15, 1, 50))), nondetect = c(floor(runif(15, 0, 2))))
 #' bck_ex_uneven <- data.frame(samples = c(floor(runif(20, 1, 50))), nondetect = c(floor(runif(20, 0, 2))))
 #' G_result_uneven <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex3, background = bck_ex3)
@@ -312,10 +312,11 @@ gehan <- function(site,
           "\n", 
           "p-value:", 
           round(p_val, 3), 
-          "\t"
+          "\n", 
+          "\n"
         )
       )
-      cat(paste("DECISION:", "\t","Reject null hypothesis", "\n"))
+      cat(paste("DECISION:", "Reject null hypothesis, sufficient evidence of median difference", "\n"))
       cat(row, "\n")
     } else {
       cat(row, "\n")
@@ -327,10 +328,11 @@ gehan <- function(site,
           "\n", 
           "p-value:", 
           round(p_val, 3), 
-          "\t"
+          "\n", 
+          "\n"
         )
       )
-      cat(paste("DECISION:", "\t","Fail to reject null hypothesis", "\n"))
+      cat(paste("DECISION:", "Fail to reject null hypothesis, insufficient evidence of median difference", "\n"))
       cat(row, "\n")
     }
   }
@@ -344,7 +346,6 @@ gehan <- function(site,
   Gehan_results <- list(Gehan_param, Gehan_scores)
   return(Gehan_results)
 } # Gehan function end
-
 
 
 
