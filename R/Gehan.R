@@ -167,11 +167,11 @@ gehan <- function(site,
   ### 1) combine lists m and n, keep ID of site/background (P/B)
   
   combined_meas <- rbind(site, background)
-  # print(combined_meas)
+
   
   ### 2) order list smallest to largest 
   sorted_meas <- combined_meas[order(combined_meas$samples, combined_meas$h),]
-  print("Data Frame - Combined and Ranked")
+  print("Data Frame - Combined and Sorted")
   print(sorted_meas)
   
   ### 3) Determine values of D and E 
@@ -201,12 +201,7 @@ gehan <- function(site,
       e_rank <- c(e_rank, e)
     }
   }
-  # print(d_vec)
-  print("D scores")
-  print(d_rank)
-  # print(e_vec) 
-  print("E scores")
-  print(e_rank)
+  
   
   sorted_meas$d = d_rank
   sorted_meas$e = e_rank
@@ -228,8 +223,6 @@ gehan <- function(site,
       R_vec <- c(R_vec, R)
     }
   }
-  print("Rank")
-  print(R_vec) 
   
   sorted_meas$R = R_vec
   
@@ -243,8 +236,6 @@ gehan <- function(site,
     aR = 2*sorted_meas$R[i] - N - 1
     aR_vec <- c(aR_vec, aR)
   }
-  print("Score")
-  print(aR_vec) # all correct values what a moment 
   
   sorted_meas$aR = aR_vec 
   
@@ -345,10 +336,12 @@ gehan <- function(site,
   }
   
   ### 10) Output results if an object has been defined 
+  Gehan_scores <- as.data.frame(sorted_meas)
+  colnames(Gehan_scores) = c("Samp Measurement", "Detect (Y/N)", "Samp Location", 
+                             "d", "e", "R", "aR")
+  Gehan_param <- list(alpha = alpha, power = power, deltaS = deltaS, G = G, p_val = p_val) 
   
-  Gehan_results <- as.data.frame(sorted_meas)
-  colnames(Gehan_results) = c("Samp Measurement", "Detect (Y/N)", "Samp Location", 
-                              "d", "e", "R", "aR")
+  Gehan_results <- list(Gehan_param, Gehan_scores)
   return(Gehan_results)
 } # Gehan function end
 
