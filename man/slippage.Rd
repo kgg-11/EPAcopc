@@ -56,14 +56,14 @@ A list of measures used in the Slippage test, including:
 Perform slippage test.
 }
 \details{
-The slippage test is one of multiple possible nonparametric tests described in "Guidance for Environmental Background Analysis Volume III: Groundwater" (2003) for determining if a chemical is a Chemical of Potential Concern (COPC).
-Although the slippage test has the advantage of not making any assumptions on the distribution of either site or background measurements, there are still assumptions that need to be met for performing the slippage test. 
+The slippage test is one of multiple possible nonparametric tests described in "Guidance for Environmental Background Analysis Volume III: Groundwater" (2003) for determining if a chemical is a Chemical of Potential Concern (COPC). The slippage test focuses on extreme values of potentially impacted site measurements and compares them to the maximum background measurement.
+
 There are multiple assumptions that need to be upheld during the usage of the \code{slippage()} function; some are implemented (restricted) based on the limits of certain tables of the referenced literature.
 \itemize{
 \item The maximum background measurement must be a detected measurement; otherwise, an error is generated.
-\item The sample size of both \code{site} and \code{background} measurements must be between 1 and 50 due to the constraints of Tables B-2 and B-3 in the referenced literature. 
-\item The \code{alpha} argument must be 0.05 or 0.01 due to the constraints of Tables B-2 and B-3 in the referenced literature.
-\item The \code{power} argument must be 0.80 or 0.01 due to the constraints of Table 4-3 in the referenced literature.
+\item The sample size of both \code{site} and \code{background} measurements must be between 1 and 50 due to the constraints of Tables B-2 and B-3 in the referenced literature; otherwise, an error is generated.
+\item The \code{alpha} argument must be 0.05 or 0.01 due to the constraints of Tables B-2 and B-3 in the referenced literature; otherwise, an error is generated.
+\item The \code{power} argument must be 0.80 or 0.01 due to the constraints of Table 4-3 in the referenced literature; otherwise, an error is generated. 
 \item The \code{epsilon} argument must be able to be located in Table 4-3 in the referenced literature; otherwise, an error is generated.
 \item  The critical value must not be missing in Tables B-2 and B-3 of the referenced literature, otherwise, an error is generated.
 }
