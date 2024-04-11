@@ -48,7 +48,16 @@
 #' @export
 #' @references Naval Facilities Engineering Command. (2003, October).  \emph{Guidance for Environmental Background Analysis Volume III: Groundwater.} https://vsp.pnnl.gov/docs/Draft_Guidance_for_Review.pdf.
 #' 
-gehan <- function(site, background, alpha, deltaS, power, print=TRUE, plot=TRUE){
+gehan <- function(site, 
+                  background, 
+                  alpha, 
+                  deltaS, 
+                  power, 
+                  print=TRUE, 
+                  plot=TRUE
+                  )
+  
+  {
   
   ### Verify test assumptions ####
   
@@ -331,5 +340,8 @@ gehan <- function(site, background, alpha, deltaS, power, print=TRUE, plot=TRUE)
   colnames(Gehan_results) = c("Samp Measurement", "Detect (Y/N)", "Samp Location", 
                               "d", "e", "R", "aR")
   return(Gehan_results)
-} # Gehan function end 
+} # Gehan function end
+
+
+
 
