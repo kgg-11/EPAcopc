@@ -138,14 +138,25 @@ gehan <- function(site,
                            table_4.6 = table_4.6) 
   print(nreq) 
   
-  condition.check <- if (nrow(site)>=nreq*0.5 & nrow(background)>=nreq*0.5 & nrow(site) == nrow(background)) {
+  condition.check <- if (nrow(site)>=nreq*0.5 & 
+                         nrow(background)>=nreq*0.5 & 
+                         nrow(site) == nrow(background) &
+                         length(which(site$nondetect == 1)) < 0.4*nrow(site) &
+                         length(which(background$nondetect == 1)) < 0.4*nrow(background)) {
     print("minimum sample sizes for background and site is satisfied")
     print(paste0("required rows = ", nreq))
     print(paste0("rows of site = ", nrow(site)))
     print(paste0("rows of background = ", nrow(background))) 
   }
   else if(nrow(site) != nrow(background)){
-    warning("Number of site measurements should be equal to the number of background measurements")
+    warning("Number of site measurements should be equal to the number of background measurements, 
+            refer to draft guidance for sample replication guidelines")
+  }
+  else if(length(which(site$nondetect == 1)) >= 0.4*nrow(site)){
+    stop("More than 40% of site measurements are nondetects")
+  }
+  else if(length(which(background$nondetect == 1)) >= 0.4*nrow(background)){
+    stop("More than 40% of site measurements are nondetects")
   }
   else{
     warning("sample size requirements not met for desired power and significance level")
@@ -346,6 +357,4 @@ gehan <- function(site,
   Gehan_results <- list(Gehan_param, Gehan_scores)
   return(Gehan_results)
 } # Gehan function end
-
-
 
