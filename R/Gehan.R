@@ -55,11 +55,23 @@
 #' bck_ex_uneven <- data.frame(samples = c(floor(runif(20, 1, 50))), nondetect = c(floor(runif(20, 0, 2))))
 #' G_result_uneven <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex3, background = bck_ex3)
 #' 
+#' Flex naming 
+#' # flex naming 
+#' site_ex_flex<- data.frame(meas = c(floor(runif(15, 1, 50))), nd = c(rep(0, 12), rep(1, 3)))
+#' bck_ex_flex <- data.frame(blah = c(floor(runif(15, 1, 40))), scoop = c(rep(0, 12), rep(1, 3)))
+
+#' G_result_flex <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, 
+#'                        site = site_ex_flex, measure.s = site_ex_flex$meas, nd.s = site_ex_flex$nd, 
+#'                        background = bck_ex_flex, measure.b = bck_ex_flex$blah, nd.b = bck_ex_flex$scoop)
 #' @export
 #' @references Naval Facilities Engineering Command. (2003, October).  \emph{Guidance for Environmental Background Analysis Volume III: Groundwater.} https://vsp.pnnl.gov/docs/Draft_Guidance_for_Review.pdf.
 #' 
 gehan <- function(site, 
+                  measure.s, 
+                  nd.s, 
                   background, 
+                  measure.b, 
+                  nd.b, 
                   alpha, 
                   deltaS, 
                   power, 
@@ -72,6 +84,12 @@ gehan <- function(site,
   ### Verify test assumptions ####
   
   # code in table 4.6 
+  
+  site_df <- data.frame(measure.s, nd.s)
+  colnames(site_df) = c("samples", "nondetect") 
+  print(site_df)
+  background_df <- data.frame(measure.b, nd.b)
+  colnames(background_df) = c("samples", "nondetect") 
   
   table_4.6 <- data.frame(deltaS.choices = c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9,1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.25, 2.5, 2.75, 4.0, 4.5, 5.0), 
                           power0.95_alpha0.01 = c(3972, 998, 448, 255, 166, 117, 88, 69, 58, 47, 40, 35, 31,28, 25, 23, 22, 20, 19, 18, 16, 15, 15, 14, 13, 13),
@@ -138,31 +156,31 @@ gehan <- function(site,
                            table_4.6 = table_4.6) 
   print(nreq) 
   
-  condition.check <- if (nrow(site)>=nreq*0.5 & 
-                         nrow(background)>=nreq*0.5 & 
-                         nrow(site) == nrow(background) &
-                         length(which(site$nondetect == 1)) < 0.4*nrow(site) &
-                         length(which(background$nondetect == 1)) < 0.4*nrow(background)) {
+  condition.check <- if (nrow(site_df)>=nreq*0.5 & 
+                         nrow(background_df)>=nreq*0.5 & 
+                         nrow(site_df) == nrow(background_df) &
+                         length(which(site_df$nondetect == 1)) < 0.4*nrow(site_df) &
+                         length(which(background_df$nondetect == 1)) < 0.4*nrow(background_df)) {
     print("minimum sample sizes for background and site is satisfied")
     print(paste0("required rows = ", nreq))
-    print(paste0("rows of site = ", nrow(site)))
-    print(paste0("rows of background = ", nrow(background))) 
+    print(paste0("rows of site = ", nrow(site_df)))
+    print(paste0("rows of background = ", nrow(background_df))) 
   }
-  else if(nrow(site) != nrow(background)){
+  else if(nrow(site_df) != nrow(background_df)){
     warning("Number of site measurements should be equal to the number of background measurements, 
             refer to draft guidance for sample replication guidelines")
   }
-  else if(length(which(site$nondetect == 1)) >= 0.4*nrow(site)){
+  else if(length(which(site_df$nondetect == 1)) >= 0.4*nrow(site_df)){
     stop("More than 40% of site measurements are nondetects")
   }
-  else if(length(which(background$nondetect == 1)) >= 0.4*nrow(background)){
+  else if(length(which(background_df$nondetect == 1)) >= 0.4*nrow(background_df)){
     stop("More than 40% of site measurements are nondetects")
   }
   else{
     warning("sample size requirements not met for desired power and significance level")
     print(paste0("required rows = ", nreq))
-    print(paste0("rows of site = ", nrow(site)))
-    print(paste0("rows of background = ", nrow(background)))
+    print(paste0("rows of site = ", nrow(site_df)))
+    print(paste0("rows of background = ", nrow(background_df)))
     return(condition.check)
   } # condition check end 
   
@@ -172,16 +190,16 @@ gehan <- function(site,
   # 0) assign binary variable to determine site ID (0 = background, 1 = site)
   # non-detects should already be in input df (detect = 0, non-detect = 1)
   
-  site$h <- 1
-  background$h <- 0
+  site_df$h <- 1
+  background_df$h <- 0
   
   ### 1) combine lists m and n, keep ID of site/background (P/B)
   
-  combined_meas <- rbind(site, background)
+  combined_meas <- rbind(site_df, background_df) 
 
   
   ### 2) order list smallest to largest 
-  sorted_meas <- combined_meas[order(combined_meas$samples, combined_meas$h),]
+  sorted_meas <- combined_meas[order(combined_meas$nondetect, combined_meas$h),]
   print("Data Frame - Combined and Sorted")
   print(sorted_meas)
   
@@ -252,8 +270,8 @@ gehan <- function(site,
   
   ### 6) Calculate Gehan statistic 
   
-  m = nrow(background)
-  n = nrow(site)
+  m = nrow(background_df)
+  n = nrow(site_df)
   
   sum_site = with(sorted_meas, sum(aR[h == 1]))
   
@@ -269,21 +287,21 @@ gehan <- function(site,
   
   ### 8) Plots 
   if(plot == TRUE) { 
-    binw3 <- round(max(range(site$samples),range(background$samples))/5)
+    binw3 <- round(max(range(site_df$samples),range(background_df$samples))/5)
     
     my_histogram <- ggplot2::ggplot() + 
-      ggplot2::geom_histogram(data = background, 
+      ggplot2::geom_histogram(data = background_df, 
                               ggplot2::aes(x = samples, col = I("black"), fill = "b"), 
                               alpha = 0.8, bins = binw3) +
-      ggplot2::geom_histogram(data = site, 
+      ggplot2::geom_histogram(data = site_df, 
                               ggplot2::aes(x = samples, col = I("black"), fill = "r"), 
                               alpha = 0.8, bins = binw3) +
       ggplot2::scale_fill_manual(name ="Measurement ID", 
                                  values = c("r" = "#1F968BFF", "b" = "#440154FF"), 
                                  labels=c("b" = "background", "r" = "site")) +
-      ggplot2::geom_vline(ggplot2::aes(xintercept = median(site$samples)),
+      ggplot2::geom_vline(ggplot2::aes(xintercept = median(site_df$samples)),
                           col='#00CFAC', size=1, linetype = "dashed") + 
-      ggplot2::geom_vline(ggplot2::aes(xintercept = median(background$samples)), 
+      ggplot2::geom_vline(ggplot2::aes(xintercept = median(background_df$samples)), 
                           col='#BD00FF', size=1, linetype = "dashed") + 
       ggplot2::theme_classic() +
       ggplot2::xlab("COPC Concentration") + 
@@ -306,10 +324,10 @@ gehan <- function(site,
       paste(
         "\t" ,
         "Site (n):",
-        nrow(site),
+        nrow(site_df),
         "\t",
         "Background (m):",
-        nrow(background),
+        nrow(background_df),
         "\n"
       )
     )
@@ -357,4 +375,8 @@ gehan <- function(site,
   Gehan_results <- list(Gehan_param, Gehan_scores)
   return(Gehan_results)
 } # Gehan function end
+
+
+
+
 
