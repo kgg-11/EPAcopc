@@ -65,10 +65,11 @@ There are multiple assumptions that need to be upheld during the usage of the \c
 \item The \code{alpha} argument must be 0.05 or 0.01 due to the constraints of Tables B-2 and B-3 in the referenced literature; otherwise, an error is generated.
 \item The \code{power} argument must be 0.80 or 0.01 due to the constraints of Table 4-3 in the referenced literature; otherwise, an error is generated. 
 \item The \code{epsilon} argument must be able to be located in Table 4-3 in the referenced literature; otherwise, an error is generated.
-\item  The critical value must not be missing in Tables B-2 and B-3 of the referenced literature, otherwise, an error is generated.
+\item  The critical value must not be missing in Tables B-2 and B-3 of the referenced literature; otherwise, an error is generated.
 }
 }
 \examples{
+# Randomly generated example
 set.seed(4321)
 example_site <-
   data.frame(measure = round(rchisq(n = 50, df = 5, ncp = 6), 1),
