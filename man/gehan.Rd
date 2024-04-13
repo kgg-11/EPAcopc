@@ -4,7 +4,19 @@
 \alias{gehan}
 \title{Perform Gehan test.}
 \usage{
-gehan(site, background, alpha, deltaS, power, print = TRUE, plot = TRUE)
+gehan(
+  site,
+  measure.s,
+  nd.s,
+  background,
+  measure.b,
+  nd.b,
+  alpha,
+  deltaS,
+  power,
+  print = TRUE,
+  plot = TRUE
+)
 }
 \arguments{
 \item{site}{A dataframe for site measurements. Includes one column of measurements and one column of detect/nondetect designation.}
@@ -58,10 +70,28 @@ The function allows users to store the test results as an object. The output is 
 the resulting statistics, and the data frame used to calculate the ranks and scores of each observation.
 }
 \examples{
-site_ex1 <- data.frame(samples=c(2, 4, 8, 17, 20, 25, 34, 35, 40, 43), nondetect = c(0, 1, rep(0, 5), 1, rep(0,2)))
-bck_ex1 <- data.frame(samples=c(1, 4, 5, 7, 12, 15, 18, 21, 25, 27), nondetect = c(0, 1, 0, 0, 1, 0, 0, 1, 1, 0))
-G_result <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex1, background = bck_ex1) 
+Actual Data (ex 4-12 from EPA)
+site_ex <- data.frame(samples=c(2, 4, 8, 17, 20, 25, 34, 35, 40, 43), nondetect = c(0, 1, rep(0, 5), 1, rep(0,2)))
+bck_ex <- data.frame(samples=c(1, 4, 5, 7, 12, 15, 18, 21, 25, 27), nondetect = c(0, 1, 0, 0, 1, 0, 0, 1, 1, 0))
+G_result <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex, background = bck_ex) 
 
+Randomized Data 
+site_ex_random <- data.frame(samples = c(floor(runif(15, 1, 50))), nondetect = c(floor(runif(15, 0, 2))))
+bck_ex_random <- data.frame(samples = c(floor(runif(15, 1, 40))), nondetect = c(floor(runif(15, 0, 2))))
+G_result_random <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex_random, background = bck_ex_random)
+
+Uneven Number of Site and Background Measurements - Not Recommended by EPA 
+site_ex_uneven <- data.frame(samples = c(floor(runif(15, 1, 50))), nondetect = c(floor(runif(15, 0, 2))))
+bck_ex_uneven <- data.frame(samples = c(floor(runif(20, 1, 50))), nondetect = c(floor(runif(20, 0, 2))))
+G_result_uneven <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex3, background = bck_ex3)
+
+Flex naming 
+# flex naming 
+site_ex_flex<- data.frame(meas = c(floor(runif(15, 1, 50))), nd = c(rep(0, 12), rep(1, 3)))
+bck_ex_flex <- data.frame(blah = c(floor(runif(15, 1, 40))), scoop = c(rep(0, 12), rep(1, 3)))
+G_result_flex <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, 
+                       site = site_ex_flex, measure.s = site_ex_flex$meas, nd.s = site_ex_flex$nd, 
+                       background = bck_ex_flex, measure.b = bck_ex_flex$blah, nd.b = bck_ex_flex$scoop)
 }
 \references{
 Naval Facilities Engineering Command. (2003, October).  \emph{Guidance for Environmental Background Analysis Volume III: Groundwater.} https://vsp.pnnl.gov/docs/Draft_Guidance_for_Review.pdf.
