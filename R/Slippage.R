@@ -38,9 +38,12 @@
 #' example_site <-
 #'   data.frame(measure = round(rchisq(n = 50, df = 5, ncp = 6), 1),
 #'              nondetect = rbinom(n = 50, size = 1, p = 0.2))
+#'              
+#' set.seed(4321)
 #' example_background <-
 #'   data.frame(measure = round(rchisq(n = 50, df = 5), 1),
 #'              nondetect = rbinom(n = 50, size = 1, p = 0.2))
+#'              
 #' example1 <- slippage(
 #'   site = example_site,
 #'   measure.s = example_site$measure,
@@ -51,6 +54,7 @@
 #'   epsilon = 0.6,
 #'   plot = TRUE
 #' )
+#' 
 #' example1
 #' @export
 #' @references Naval Facilities Engineering Command. (2003, October).  \emph{Guidance for Environmental Background Analysis Volume III: Groundwater.} https://vsp.pnnl.gov/docs/Draft_Guidance_for_Review.pdf.
@@ -112,6 +116,7 @@ slippage <-
     warning("Sample size is small for power desired")
   }
   
+  ########### Condition check for sample size bounds) ##############
   condition_sampleSizeBounds <- if (m < 1 || m > 50 || n < 1 || n > 50) {
     stop("Sample size must be between 1 and 50")
   }

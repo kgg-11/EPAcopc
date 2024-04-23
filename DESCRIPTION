@@ -1,7 +1,7 @@
 Package: EPAcopc
 Type: Package
 Title: Nonparametric Tests for EPA COPC Determination
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(
     person("Kylee", "Guarino", email = "kgg11@pitt.edu", role = c("aut", "cre")),
     person("Nick", "Heaton", email = "njh52@pitt.edu", role = "aut"),

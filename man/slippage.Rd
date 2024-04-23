@@ -74,9 +74,12 @@ set.seed(4321)
 example_site <-
   data.frame(measure = round(rchisq(n = 50, df = 5, ncp = 6), 1),
              nondetect = rbinom(n = 50, size = 1, p = 0.2))
+             
+set.seed(4321)
 example_background <-
   data.frame(measure = round(rchisq(n = 50, df = 5), 1),
              nondetect = rbinom(n = 50, size = 1, p = 0.2))
+             
 example1 <- slippage(
   site = example_site,
   measure.s = example_site$measure,
@@ -87,6 +90,7 @@ example1 <- slippage(
   epsilon = 0.6,
   plot = TRUE
 )
+
 example1
 }
 \references{
