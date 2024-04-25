@@ -43,23 +43,27 @@
 #' Actual Data (ex 4-12 from EPA)
 #' site_ex <- data.frame(samples=c(2, 4, 8, 17, 20, 25, 34, 35, 40, 43), nondetect = c(0, 1, rep(0, 5), 1, rep(0,2)))
 #' bck_ex <- data.frame(samples=c(1, 4, 5, 7, 12, 15, 18, 21, 25, 27), nondetect = c(0, 1, 0, 0, 1, 0, 0, 1, 1, 0))
-#' G_result <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex, background = bck_ex) 
+#' G_result <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, 
+#'                   site = site_ex, measure.s = site_ex$samples, nd.s = site_ex$nondetect, 
+#'                   background = bck_ex, measure.b = bck_ex$sample, nd.b = bck_ex$nondetect) 
 #' 
 #' Randomized Data 
-#' site_ex_random <- data.frame(samples = c(floor(runif(15, 1, 50))), nondetect = c(floor(runif(15, 0, 2))))
-#' bck_ex_random <- data.frame(samples = c(floor(runif(15, 1, 40))), nondetect = c(floor(runif(15, 0, 2))))
-#' G_result_random <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex_random, background = bck_ex_random)
+#' site_ex_random <- data.frame(samples = c(floor(runif(15, 1, 50))), nondetect = c(rep(0, 12), rep(1, 3)))
+#' bck_ex_random <- data.frame(samples = c(floor(runif(15, 1, 40))), nondetect = c(rep(0, 12), rep(1, 3)))
+#' G_result_random <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, 
+#'                    site = site_ex_random, measure.s = site_ex_random$samples, nd.s = site_ex_random$nondetect,
+#'                    background = bck_ex_random, measure.b = bck_ex_random$sample, nd.b = bck_ex_random$nondetect)
 #' 
 #' Uneven Number of Site and Background Measurements - Not Recommended by EPA 
-#' site_ex_uneven <- data.frame(samples = c(floor(runif(15, 1, 50))), nondetect = c(floor(runif(15, 0, 2))))
-#' bck_ex_uneven <- data.frame(samples = c(floor(runif(20, 1, 50))), nondetect = c(floor(runif(20, 0, 2))))
-#' G_result_uneven <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex3, background = bck_ex3)
+#' site_ex_uneven <- data.frame(samples = c(floor(runif(15, 1, 50))), nondetect = c(rep(0, 12), rep(1, 3)))
+#' bck_ex_uneven <- data.frame(samples = c(floor(runif(20, 1, 50))), nondetect = c(rep(0, 17), rep(1, 3)))
+#' G_result_uneven <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9,
+#'                         site = site_ex_uneven, measure.s = site_ex_uneven$samples, nd.s = site_ex_uneven$nondetect, 
+#'                         background = bck_ex_uneven, measure.b = bck_ex_uneven$sample, nd.b = bck_ex_uneven$nondetect)
 #' 
 #' Flex naming 
-#' # flex naming 
 #' site_ex_flex<- data.frame(meas = c(floor(runif(15, 1, 50))), nd = c(rep(0, 12), rep(1, 3)))
 #' bck_ex_flex <- data.frame(blah = c(floor(runif(15, 1, 40))), scoop = c(rep(0, 12), rep(1, 3)))
-
 #' G_result_flex <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, 
 #'                        site = site_ex_flex, measure.s = site_ex_flex$meas, nd.s = site_ex_flex$nd, 
 #'                        background = bck_ex_flex, measure.b = bck_ex_flex$blah, nd.b = bck_ex_flex$scoop)
@@ -87,7 +91,7 @@ gehan <- function(site,
   
   site_df <- data.frame(measure.s, nd.s)
   colnames(site_df) = c("samples", "nondetect") 
-  print(site_df)
+
   background_df <- data.frame(measure.b, nd.b)
   colnames(background_df) = c("samples", "nondetect") 
   
@@ -159,8 +163,8 @@ gehan <- function(site,
   condition.check <- if (nrow(site_df)>=nreq*0.5 & 
                          nrow(background_df)>=nreq*0.5 & 
                          nrow(site_df) == nrow(background_df) &
-                         length(which(site_df$nondetect == 1)) < 0.4*nrow(site_df) &
-                         length(which(background_df$nondetect == 1)) < 0.4*nrow(background_df)) {
+                         length(which(site_df$nondetect == 1)) <= 0.4*nrow(site_df) &
+                         length(which(background_df$nondetect == 1)) <= 0.4*nrow(background_df)) {
     print("minimum sample sizes for background and site is satisfied")
     print(paste0("required rows = ", nreq))
     print(paste0("rows of site = ", nrow(site_df)))
@@ -170,10 +174,10 @@ gehan <- function(site,
     warning("Number of site measurements should be equal to the number of background measurements, 
             refer to draft guidance for sample replication guidelines")
   }
-  else if(length(which(site_df$nondetect == 1)) >= 0.4*nrow(site_df)){
+  else if(length(which(site_df$nondetect == 1)) > 0.4*nrow(site_df)){
     stop("More than 40% of site measurements are nondetects")
   }
-  else if(length(which(background_df$nondetect == 1)) >= 0.4*nrow(background_df)){
+  else if(length(which(background_df$nondetect == 1)) > 0.4*nrow(background_df)){
     stop("More than 40% of site measurements are nondetects")
   }
   else{
@@ -181,7 +185,6 @@ gehan <- function(site,
     print(paste0("required rows = ", nreq))
     print(paste0("rows of site = ", nrow(site_df)))
     print(paste0("rows of background = ", nrow(background_df)))
-    return(condition.check)
   } # condition check end 
   
   
@@ -375,6 +378,9 @@ gehan <- function(site,
   Gehan_results <- list(Gehan_param, Gehan_scores)
   return(Gehan_results)
 } # Gehan function end
+
+
+
 
 
 
