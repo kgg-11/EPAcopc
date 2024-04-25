@@ -1,8 +1,12 @@
 ########## FUNCTION : Gehan  #######################
 ##' Perform Gehan test.
 #'
-#' @param site A dataframe for site measurements. Includes one column of measurements and one column of detect/nondetect designation. 
-#' @param background A dataframe for background measurements. Includes one column of measurements and one column of detect/nondetect designation..
+#' @param site A dataframe for site measurements. 
+#' @param measure.s Variable for \code{site} measurements that provides the corresponding concentration. Default is a column of site dataframe named measurement (\code{site$measurement}).
+#' @param nd.s Indicator variable for \code{site} measurements that determines if the corresponding measurement (row) is a nondetect. A value of \code{1} indicates that the row is a nondetect (\code{0} is a detected measurement). Default is a column of site dataframe named nondetect (\code{site$nondetect}).
+#' @param background A dataframe for background measurements. 
+#' @param measure.b Variable for \code{background} measurements that provides the corresponding concentration. Default is a column of background dataframe named measurement (\code{background$measurement}).
+#' @param nd.b Indicator variable for \code{background} measurements that determines if the corresponding measurement (row) is a nondetect. A value of \code{1} indicates that the row is a nondetect (\code{0} is a detected measurement). Default is a column of background dataframe named nondetect (\code{background$nondetect}).
 #' @param deltaS  Magnitude of the difference in median site and background concentrations.
 #' @param alpha Type I error rate. Options are \code{0.05} (default), \code{0.01}, or \code{0.10}.
 #' @param power Statistical power. Options are \code{0.75} (default), \code{0.90}, or \code{0.95}.
@@ -71,11 +75,11 @@
 #' @references Naval Facilities Engineering Command. (2003, October).  \emph{Guidance for Environmental Background Analysis Volume III: Groundwater.} https://vsp.pnnl.gov/docs/Draft_Guidance_for_Review.pdf.
 #' 
 gehan <- function(site, 
-                  measure.s, 
-                  nd.s, 
-                  background, 
-                  measure.b, 
-                  nd.b, 
+                  measure.s = site$measurement,
+                  nd.s = site$nondetect,
+                  background,
+                  measure.b = background$measurement,
+                  nd.b = background$nondetect,
                   alpha, 
                   deltaS, 
                   power, 
@@ -379,6 +383,11 @@ gehan <- function(site,
   return(Gehan_results)
 } # Gehan function end
 
+site_ex <- data.frame(samples=c(2, 4, 8, 17, 20, 25, 34, 35, 40, 43), nondetect = c(0, 1, rep(0, 5), 1, rep(0,2)))
+bck_ex <- data.frame(samples=c(1, 4, 5, 7, 12, 15, 18, 21, 25, 27), nondetect = c(0, 1, 0, 0, 1, 0, 0, 1, 1, 0))
+G_result <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, 
+                  site = site_ex, measure.s = site_ex$samples, nd.s = site_ex$nondetect,
+                  background = bck_ex, measure.b = bck_ex$sample, nd.b = bck_ex$nondetect) 
 
 
 
