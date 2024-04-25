@@ -14,20 +14,18 @@
 #' @param print Logical. Will display Gehan test results. (default is \code{TRUE})
 #' @return A list containing two objects:
 #' \itemize{
-#'   \item \code{List of parameters and resulting statistics}
 #'      \item \code{alpha} - Type I error rate. 
 #'      \item \code{power} - Statistical power to detect differences. 
 #'      \item \code{deltaS} - Magnitude of the difference in median site and background concentrations.
 #'      \item \code{G} - Gehan test statistic (analogous to a Z statistic). 
 #'      \item \code{p_val} - P-value of the test, computed from a standard normal distribution. 
-#'    \item \code{Data frame used to calculate ranks and scores of each observation}
 #'      \item \code{Samp Measurement} - Measured chemcical concentration of each sample.
 #'      \item \code{Detect (Y/N)} - Inicator measurement detection status where  detect = 0 and nondetect = 1.
 #'      \item \code{Samp Location} - Indicator of location sampled where background = 0 and site = 1.
 #'      \item \code{d} - Rank determining variable 1. 
 #'      \item \code{e} - Rank determining variable 2. 
 #'      \item \code{R} - Calculated rank. 
-#'   \item \code{aR} - Calculated rank score. 
+#'      \item \code{aR} - Calculated rank score. 
 #' }
 #' 
 #' @details The Gehan test is a nonparametric test that is useful for detecting differences in the median chemical concentrations of 
