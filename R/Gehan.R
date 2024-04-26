@@ -381,15 +381,3 @@ gehan <- function(site,
   return(Gehan_results)
 } # Gehan function end
 
-site_ex <- data.frame(samples=c(2, 4, 8, 17, 20, 25, 34, 35, 40, 43), nondetect = c(0, 1, rep(0, 5), 1, rep(0,2)))
-bck_ex <- data.frame(samples=c(1, 4, 5, 7, 12, 15, 18, 21, 25, 27), nondetect = c(0, 1, 0, 0, 1, 0, 0, 1, 1, 0))
-G_result <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, 
-                  site = site_ex, measure.s = site_ex$samples, nd.s = site_ex$nondetect,
-                  background = bck_ex, measure.b = bck_ex$sample, nd.b = bck_ex$nondetect) 
-
-
-
-
-
-
-
