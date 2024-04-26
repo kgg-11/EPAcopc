@@ -6,11 +6,11 @@
 \usage{
 gehan(
   site,
-  measure.s,
-  nd.s,
+  measure.s = site$measurement,
+  nd.s = site$nondetect,
   background,
-  measure.b,
-  nd.b,
+  measure.b = background$measurement,
+  nd.b = background$nondetect,
   alpha,
   deltaS,
   power,
@@ -19,9 +19,17 @@ gehan(
 )
 }
 \arguments{
-\item{site}{A dataframe for site measurements. Includes one column of measurements and one column of detect/nondetect designation.}
+\item{site}{A dataframe for site measurements.}
 
-\item{background}{A dataframe for background measurements. Includes one column of measurements and one column of detect/nondetect designation..}
+\item{measure.s}{Variable for \code{site} measurements that provides the corresponding concentration. Default is a column of site dataframe named measurement (\code{site$measurement}).}
+
+\item{nd.s}{Indicator variable for \code{site} measurements that determines if the corresponding measurement (row) is a nondetect. A value of \code{1} indicates that the row is a nondetect (\code{0} is a detected measurement). Default is a column of site dataframe named nondetect (\code{site$nondetect}).}
+
+\item{background}{A dataframe for background measurements.}
+
+\item{measure.b}{Variable for \code{background} measurements that provides the corresponding concentration. Default is a column of background dataframe named measurement (\code{background$measurement}).}
+
+\item{nd.b}{Indicator variable for \code{background} measurements that determines if the corresponding measurement (row) is a nondetect. A value of \code{1} indicates that the row is a nondetect (\code{0} is a detected measurement). Default is a column of background dataframe named nondetect (\code{background$nondetect}).}
 
 \item{alpha}{Type I error rate. Options are \code{0.05} (default), \code{0.01}, or \code{0.10}.}
 
@@ -36,20 +44,18 @@ gehan(
 \value{
 A list containing two objects:
 \itemize{
-  \item \code{List of parameters and resulting statistics}
      \item \code{alpha} - Type I error rate. 
      \item \code{power} - Statistical power to detect differences. 
      \item \code{deltaS} - Magnitude of the difference in median site and background concentrations.
      \item \code{G} - Gehan test statistic (analogous to a Z statistic). 
      \item \code{p_val} - P-value of the test, computed from a standard normal distribution. 
-   \item \code{Data frame used to calculate ranks and scores of each observation}
      \item \code{Samp Measurement} - Measured chemcical concentration of each sample.
      \item \code{Detect (Y/N)} - Inicator measurement detection status where  detect = 0 and nondetect = 1.
      \item \code{Samp Location} - Indicator of location sampled where background = 0 and site = 1.
      \item \code{d} - Rank determining variable 1. 
      \item \code{e} - Rank determining variable 2. 
      \item \code{R} - Calculated rank. 
-  \item \code{aR} - Calculated rank score. 
+     \item \code{aR} - Calculated rank score. 
 }
 }
 \description{
@@ -70,23 +76,28 @@ The function allows users to store the test results as an object. The output is 
 the resulting statistics, and the data frame used to calculate the ranks and scores of each observation.
 }
 \examples{
-Actual Data (ex 4-12 from EPA)
+## Actual Data (ex 4-12 from EPA)
 site_ex <- data.frame(samples=c(2, 4, 8, 17, 20, 25, 34, 35, 40, 43), nondetect = c(0, 1, rep(0, 5), 1, rep(0,2)))
 bck_ex <- data.frame(samples=c(1, 4, 5, 7, 12, 15, 18, 21, 25, 27), nondetect = c(0, 1, 0, 0, 1, 0, 0, 1, 1, 0))
-G_result <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex, background = bck_ex) 
+G_result <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, 
+                  site = site_ex, measure.s = site_ex$samples, nd.s = site_ex$nondetect, 
+                  background = bck_ex, measure.b = bck_ex$sample, nd.b = bck_ex$nondetect) 
 
-Randomized Data 
-site_ex_random <- data.frame(samples = c(floor(runif(15, 1, 50))), nondetect = c(floor(runif(15, 0, 2))))
-bck_ex_random <- data.frame(samples = c(floor(runif(15, 1, 40))), nondetect = c(floor(runif(15, 0, 2))))
-G_result_random <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex_random, background = bck_ex_random)
+## Randomized Data 
+site_ex_random <- data.frame(samples = c(floor(runif(15, 1, 50))), nondetect = c(rep(0, 12), rep(1, 3)))
+bck_ex_random <- data.frame(samples = c(floor(runif(15, 1, 40))), nondetect = c(rep(0, 12), rep(1, 3)))
+G_result_random <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, 
+                   site = site_ex_random, measure.s = site_ex_random$samples, nd.s = site_ex_random$nondetect,
+                   background = bck_ex_random, measure.b = bck_ex_random$sample, nd.b = bck_ex_random$nondetect)
 
-Uneven Number of Site and Background Measurements - Not Recommended by EPA 
-site_ex_uneven <- data.frame(samples = c(floor(runif(15, 1, 50))), nondetect = c(floor(runif(15, 0, 2))))
-bck_ex_uneven <- data.frame(samples = c(floor(runif(20, 1, 50))), nondetect = c(floor(runif(20, 0, 2))))
-G_result_uneven <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, site = site_ex3, background = bck_ex3)
+## Uneven Number of Site and Background Measurements - Not Recommended by EPA 
+site_ex_uneven <- data.frame(samples = c(floor(runif(15, 1, 50))), nondetect = c(rep(0, 12), rep(1, 3)))
+bck_ex_uneven <- data.frame(samples = c(floor(runif(20, 1, 50))), nondetect = c(rep(0, 17), rep(1, 3)))
+G_result_uneven <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9,
+                        site = site_ex_uneven, measure.s = site_ex_uneven$samples, nd.s = site_ex_uneven$nondetect, 
+                        background = bck_ex_uneven, measure.b = bck_ex_uneven$sample, nd.b = bck_ex_uneven$nondetect)
 
-Flex naming 
-# flex naming 
+## Flex naming 
 site_ex_flex<- data.frame(meas = c(floor(runif(15, 1, 50))), nd = c(rep(0, 12), rep(1, 3)))
 bck_ex_flex <- data.frame(blah = c(floor(runif(15, 1, 40))), scoop = c(rep(0, 12), rep(1, 3)))
 G_result_flex <- gehan(alpha = 0.05, deltaS = 2.0, power = 0.9, 
